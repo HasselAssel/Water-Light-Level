@@ -57,7 +57,7 @@ class Config {
         Properties properties = new Properties();
         properties.setProperty("lightLevel", Integer.toString(LIGHT_LEVEL));
         properties.setProperty("distance", Integer.toString(DISTANCE));
-        properties.setProperty("argb", Integer.toString(ARGB));
+        properties.setProperty("argb", Integer.toString(ARGB, 16));
         properties.setProperty("turned_on", Boolean.toString(TURNED_ON));
         try (OutputStream out = Files.newOutputStream(CONFIG_FILE)) {
             properties.store(out, null);
