@@ -71,4 +71,4 @@ Turns the aura **on or off** without changing any settings.
 
 ## 🧑‍💻 License
 
-CC0-1.0 — do whatever you want 🙂
+MIT
