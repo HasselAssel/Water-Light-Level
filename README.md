@@ -15,6 +15,7 @@ It renders a translucent **aura** around qualifying water blocks, making it easy
 - 📏 Configurable **scan distance**
 - 🎨 Customizable **aura color (ARGB)**
 - ⌨ Toggle the aura on/off instantly
+- ⌨️ Toggle the aura via a keystroke
 
 ---
 
