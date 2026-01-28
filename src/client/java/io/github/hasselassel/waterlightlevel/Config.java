@@ -43,7 +43,7 @@ class Config {
         } catch (NumberFormatException ignored) {
         }
         try {
-            ARGB = Integer.parseInt(properties.getProperty("argb", Integer.toString(ARGB, 16)), 16);
+            ARGB = Integer.parseInt(properties.getProperty("argb", Integer.toUnsignedString(ARGB, 16)), 16);
         } catch (NumberFormatException ignored) {
         }
         try {
@@ -57,7 +57,7 @@ class Config {
         Properties properties = new Properties();
         properties.setProperty("lightLevel", Integer.toString(LIGHT_LEVEL));
         properties.setProperty("distance", Integer.toString(DISTANCE));
-        properties.setProperty("argb", Integer.toString(ARGB, 16));
+        properties.setProperty("argb", Integer.toUnsignedString(ARGB, 16));
         properties.setProperty("turned_on", Boolean.toString(TURNED_ON));
         try (OutputStream out = Files.newOutputStream(CONFIG_FILE)) {
             properties.store(out, null);

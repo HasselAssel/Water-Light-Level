@@ -27,8 +27,8 @@ All commands are under:
 
 ### Light Level
 
-`/waterlightlevel setlight <level>`
-`/waterlightlevel getlight`
+`/waterlightlevel lightlevel <level>`
+`/waterlightlevel lightlevel`
 
 Sets or gets the **maximum light level** a water block may have to be highlighted.
 
@@ -36,8 +36,8 @@ Sets or gets the **maximum light level** a water block may have to be highlighte
 
 ### Scan Distance
 
-`/waterlightlevel setdist <distance>`
-`/waterlightlevel getdist`
+`/waterlightlevel distance <distance>`
+`/waterlightlevel distance`
 
 Controls how far around the player the mod scans for water blocks.
 
@@ -45,10 +45,10 @@ Controls how far around the player the mod scans for water blocks.
 
 ### Aura Color (ARGB)
 
-`/waterlightlevel setargb <alpha><red><green><blue>`
-`/waterlightlevel getargb`
+`/waterlightlevel color_argb <alpha><red><green><blue>` 
+`/waterlightlevel color_argb`
 
-Customize the aura color and transparency. Values need to be in HEX.
+Customize the aura color and transparency. Value need to be in HEX.
 
 ---
 
