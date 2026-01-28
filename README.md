@@ -18,6 +18,10 @@ It renders a translucent **aura** around qualifying water blocks, making it easy
 
 ---
 
+![Example 1](assets/images/example1.png)
+
+---
+
 ## 🧭 Commands
 
 All commands are under:
@@ -57,6 +61,10 @@ Customize the aura color and transparency. Value need to be in HEX.
 `/waterlightlevel toggle`
 
 Turns the aura **on or off** without changing any settings.
+
+---
+
+![Example 2](assets/images/example2.png)
 
 ---
 
