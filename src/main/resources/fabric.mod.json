@@ -3,32 +3,22 @@
 	"id": "water-light-level",
 	"version": "${version}",
 	"name": "Water Light Level",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Client-side visualization of low-light water blocks, useful for spotting and creating drowned-safe zones",
 	"authors": [
-		"Me!"
+		"HasselAssel"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/HasselAssel/Water-Light-Level"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/water-light-level/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
-		"main": [
-			"io.github.hasselassel.waterlightlevel.WaterLightLevel"
-		],
 		"client": [
 			"io.github.hasselassel.waterlightlevel.WaterLightLevelClient"
 		]
 	},
-	"mixins": [
-		"water-light-level.mixins.json",
-		{
-			"config": "water-light-level.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.18.4",
 		"minecraft": "~1.21.11",
