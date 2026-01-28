@@ -45,7 +45,7 @@ Controls how far around the player the mod scans for water blocks.
 
 ### Aura Color (ARGB)
 
-`/waterlightlevel setargb <alpha> <red> <green> <blue>`
+`/waterlightlevel setargb <alpha><red><green><blue>`
 `/waterlightlevel getargb`
 
 Customize the aura color and transparency. Values need to be in HEX.
