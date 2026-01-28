@@ -34,11 +34,22 @@ class Config {
             } catch (IOException ignored) {
             }
         }
-        LIGHT_LEVEL = Integer.parseInt(properties.getProperty("lightLevel", Integer.toString(LIGHT_LEVEL)));
-        DISTANCE = Integer.parseInt(properties.getProperty("distance", Integer.toString(DISTANCE)));
-        ARGB = Integer.parseInt(properties.getProperty("argb", Integer.toString(ARGB, 16)), 16);
-        TURNED_ON = Boolean.parseBoolean(properties.getProperty("turned_on", Boolean.toString(TURNED_ON)));
-
+        try {
+            LIGHT_LEVEL = Integer.parseInt(properties.getProperty("lightLevel", Integer.toString(LIGHT_LEVEL)));
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            DISTANCE = Integer.parseInt(properties.getProperty("distance", Integer.toString(DISTANCE)));
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            ARGB = Integer.parseInt(properties.getProperty("argb", Integer.toString(ARGB, 16)), 16);
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            TURNED_ON = Boolean.parseBoolean(properties.getProperty("turned_on", Boolean.toString(TURNED_ON)));
+        } catch (NumberFormatException ignored) {
+        }
         saveConfig();
     }
 
