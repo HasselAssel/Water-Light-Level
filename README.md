@@ -69,6 +69,12 @@ Turns the aura **on or off** without changing any settings.
 
 ---
 
+# Links
+
+[Modrinth](https://modrinth.com/mod/water-light-level)
+
+---
+
 ## 📦 Requirements
 
 - **Minecraft**: 1.21.11  
