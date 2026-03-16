@@ -27,13 +27,13 @@ It renders a translucent **aura** around qualifying water blocks, making it easy
 
 All commands are under:
 
-`/waterlightlevel`
+`/waterlightlevel`<br>
 
 
 ### Light Level
 
-`/waterlightlevel lightlevel <level>`
-`/waterlightlevel lightlevel`
+`/waterlightlevel lightlevel <level>`<br>
+`/waterlightlevel lightlevel`<br>
 
 Sets or gets the **maximum light level** a water block may have to be highlighted.
 
@@ -41,8 +41,8 @@ Sets or gets the **maximum light level** a water block may have to be highlighte
 
 ### Scan Distance
 
-`/waterlightlevel distance <distance>`
-`/waterlightlevel distance`
+`/waterlightlevel distance <distance>`<br>
+`/waterlightlevel distance`<br>
 
 Controls how far around the player the mod scans for water blocks.
 
@@ -50,20 +50,31 @@ Controls how far around the player the mod scans for water blocks.
 
 ### Aura Color (ARGB)
 
-`/waterlightlevel color_argb <alpha><red><green><blue>` 
-`/waterlightlevel color_argb`
+`/waterlightlevel color_argb <alpha><red><green><blue>`<br>
+`/waterlightlevel color_argb`<br>
 
 Customize the aura color and transparency. Value need to be in HEX.
 
 ---
 
-### Toggle
+### Toggle Aura
 
-`/waterlightlevel toggle`
+`/waterlightlevel on`<br>
+`/waterlightlevel on`<br>
+`/waterlightlevel toggle`<br>
+or just use the toggle keybind (`L` by default)
 
-Or just use the toggle keybind (`L` by default)
+Turns the aura **on / off** or **toggles** it.
 
-Turns the aura **on or off**.
+---
+
+### Aura Only
+
+`/waterlightlevel aura_only`<br>
+
+Scans the water once and renders the result. 
+Good for large distances that would generate lag if continuously scanned.  
+Updates on the waters light level will obviously not be taken into account when this setting is on.
 
 ---
 

@@ -1,6 +1,5 @@
 package io.github.hasselassel.waterlightlevel;
 
-
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.VertexConsumer;
@@ -12,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 class AuraRenderer {
 	protected static void init() {
         WorldRenderEvents.AFTER_ENTITIES.register(render_ctx -> {
-            if (!Config.TURNED_ON) return;
+            if (!Config.AURA_ON) return;
 
             MatrixStack matrices = render_ctx.matrices();
             VertexConsumerProvider vcp = render_ctx.consumers();
@@ -54,23 +53,17 @@ class AuraRenderer {
     private static void drawMaskedBlock(VertexConsumer vc, MatrixStack.Entry e,
                                        float x, float y, float z,
                                        int argb, byte mask) {
-        // +X
-        if ((mask & (1)) != 0)
+        if ((mask & (1)) != 0) // +X
             quad(vc, e, x+1,y,z+1,  x+1,y,z,  x+1,y+1,z,  x+1,y+1,z+1, argb);
-        // -X
-        if ((mask & (1 << 1)) != 0)
+        if ((mask & (1 << 1)) != 0) // -X
             quad(vc, e, x,y,z,  x,y,z+1,  x,y+1,z+1,  x,y+1,z, argb);
-        // +Y
-        if ((mask & (1 << 2)) != 0)
+        if ((mask & (1 << 2)) != 0) // +Y
             quad(vc, e, x,y+1,z,  x,y+1,z+1,  x+1,y+1,z+1,  x+1,y+1,z, argb);
-        // -Y
-        if ((mask & (1 << 3)) != 0)
+        if ((mask & (1 << 3)) != 0) // -Y
             quad(vc, e, x,y,z+1,  x,y,z,  x+1,y,z,  x+1,y,z+1, argb);
-        // +Z
-        if ((mask & (1 << 4)) != 0)
+        if ((mask & (1 << 4)) != 0) // +Z
             quad(vc, e, x,y,z+1,  x+1,y,z+1,  x+1,y+1,z+1,  x,y+1,z+1, argb);
-        // -Z
-        if ((mask & (1 << 5)) != 0)
+        if ((mask & (1 << 5)) != 0) // -Z
             quad(vc, e, x+1,y,z,  x,y,z,  x,y+1,z,  x+1,y+1,z, argb);
     }
 }

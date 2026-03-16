@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
@@ -20,6 +21,20 @@ class UI {
     private static final String OPTION_DISTANCE = "distance";
     private static final String OPTION_ARGB = "color_argb";
     private static final String OPTION_TOGGLE_ON_OFF = "toggle";
+    private static final String OPTION_ON = "on";
+    private static final String OPTION_OFF = "off";
+    private static final String OPTION_AURA_ONLY = "aura_only";
+
+    protected static void toggle_on_off() {
+        final boolean newState = !Config.AURA_ON;
+        Config.AURA_ON = newState;
+        Config.SCAN_ON = newState;
+    }
+
+    protected static void turn_on_off(boolean state) {
+        Config.AURA_ON = state;
+        Config.SCAN_ON = state;
+    }
 
     protected static void init() {
         TOGGLE_AURA_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -44,7 +59,7 @@ class UI {
                             return 1;
                         }))
                 .then(ClientCommandManager.literal(OPTION_DISTANCE)
-                        .then(ClientCommandManager.argument("dist", IntegerArgumentType.integer(0, 64))
+                        .then(ClientCommandManager.argument("dist", IntegerArgumentType.integer(0))
                                 .executes(command_ctx -> {
                                     Config.DISTANCE = IntegerArgumentType.getInteger(command_ctx, "dist");
                                     command_ctx.getSource().sendFeedback(Text.literal("Light Level Distance set to " + Config.DISTANCE));
@@ -78,9 +93,33 @@ class UI {
                         }))
                 .then(ClientCommandManager.literal(OPTION_TOGGLE_ON_OFF)
                         .executes(command_ctx -> {
-                            Config.TURNED_ON = !Config.TURNED_ON;
-                            String end = Config.TURNED_ON ? "on" : "off";
-                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level is now turned " + end));
+                            toggle_on_off();
+                            String end = Config.AURA_ON ? "on" : "off";
+                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level has been toggled " + end));
+                            Config.saveConfig();
+                            return 1;
+                        }))
+                .then(ClientCommandManager.literal(OPTION_ON)
+                        .executes(command_ctx -> {
+                            turn_on_off(true);
+                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level is now turned on"));
+                            Config.saveConfig();
+                            return 1;
+                        }))
+                .then(ClientCommandManager.literal(OPTION_OFF)
+                        .executes(command_ctx -> {
+                            turn_on_off(false);
+                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level is now turned off"));
+                            Config.saveConfig();
+                            return 1;
+                        }))
+                .then(ClientCommandManager.literal(OPTION_AURA_ONLY)
+                        .executes(command_ctx -> {
+                            Config.SCAN_ON = false;
+                            Config.AURA_ON = true;
+                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level now scans the water once"));
+                            WaterScan.scan(MinecraftClient.getInstance());
+                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level now only renders the aura"));
                             Config.saveConfig();
                             return 1;
                         }))

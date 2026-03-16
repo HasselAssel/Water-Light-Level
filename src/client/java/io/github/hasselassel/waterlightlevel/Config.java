@@ -14,7 +14,8 @@ class Config {
     protected static int LIGHT_LEVEL = 0;
     protected static int DISTANCE = 16;
     protected static int ARGB = 0x88FF0000;
-    protected static boolean TURNED_ON = false;
+    protected static boolean SCAN_ON = false;
+    protected static boolean AURA_ON = false;
 
     private static final Path CONFIG_FILE = FabricLoader
             .getInstance().getConfigDir()
@@ -47,7 +48,11 @@ class Config {
         } catch (NumberFormatException ignored) {
         }
         try {
-            TURNED_ON = Boolean.parseBoolean(properties.getProperty("turned_on", Boolean.toString(TURNED_ON)));
+            SCAN_ON = Boolean.parseBoolean(properties.getProperty("scan_on", Boolean.toString(SCAN_ON)));
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            AURA_ON = Boolean.parseBoolean(properties.getProperty("aura_on", Boolean.toString(AURA_ON)));
         } catch (NumberFormatException ignored) {
         }
         saveConfig();
@@ -58,7 +63,8 @@ class Config {
         properties.setProperty("lightLevel", Integer.toString(LIGHT_LEVEL));
         properties.setProperty("distance", Integer.toString(DISTANCE));
         properties.setProperty("argb", Integer.toUnsignedString(ARGB, 16));
-        properties.setProperty("turned_on", Boolean.toString(TURNED_ON));
+        properties.setProperty("scan_on", Boolean.toString(SCAN_ON));
+        properties.setProperty("aura_on", Boolean.toString(AURA_ON));
         try (OutputStream out = Files.newOutputStream(CONFIG_FILE)) {
             properties.store(out, null);
         } catch (IOException ignored) {
