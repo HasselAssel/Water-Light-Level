@@ -60,7 +60,7 @@ Customize the aura color and transparency. Value need to be in HEX.
 ### Toggle Aura
 
 `/waterlightlevel on`<br>
-`/waterlightlevel on`<br>
+`/waterlightlevel off`<br>
 `/waterlightlevel toggle`<br>
 or just use the toggle keybind (`L` by default)
 
