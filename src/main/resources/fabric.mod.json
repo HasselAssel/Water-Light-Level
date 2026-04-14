@@ -1,28 +1,28 @@
 {
-	"schemaVersion": 1,
-	"id": "water-light-level",
-	"version": "${version}",
-	"name": "Water Light Level",
-	"description": "Client-side visualization of low-light water blocks, useful for spotting and creating drowned-safe zones",
-	"authors": [
-		"HasselAssel"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/HasselAssel/Water-Light-Level"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/water-light-level/icon.png",
-	"environment": "client",
-	"entrypoints": {
-		"client": [
-			"io.github.hasselassel.waterlightlevel.WaterLightLevelClient"
-		]
-	},
-	"depends": {
-		"fabricloader": ">=0.18.4",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
-		"fabric-api": "*"
-	}
+  "schemaVersion": 1,
+  "id": "water-light-level",
+  "version": "${version}",
+  "name": "Water Light Level",
+  "description": "Client-side visualization of low-light water blocks, useful for spotting and creating drowned-safe zones",
+  "authors": [
+    "HasselAssel"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/HasselAssel/Water-Light-Level"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/water-light-level/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.hasselassel.waterlightlevel.WaterLightLevelClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
 }

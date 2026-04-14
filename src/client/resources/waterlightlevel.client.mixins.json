@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "io.github.hasselassel.waterlightlevel.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ClientPlayNetworkHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

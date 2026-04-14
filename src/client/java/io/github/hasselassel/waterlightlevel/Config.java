@@ -12,7 +12,7 @@ import java.util.Properties;
 
 class Config {
     protected static int LIGHT_LEVEL = 0;
-    protected static int DISTANCE = 16;
+    protected static int CHUNK_DISTANCE = 5;
     protected static int ARGB = 0x88FF0000;
     protected static boolean SCAN_ON = false;
     protected static boolean AURA_ON = false;
@@ -40,7 +40,7 @@ class Config {
         } catch (NumberFormatException ignored) {
         }
         try {
-            DISTANCE = Integer.parseInt(properties.getProperty("distance", Integer.toString(DISTANCE)));
+            CHUNK_DISTANCE = Integer.parseInt(properties.getProperty("chunk_distance", Integer.toString(CHUNK_DISTANCE)));
         } catch (NumberFormatException ignored) {
         }
         try {
@@ -61,7 +61,7 @@ class Config {
     protected static void saveConfig() {
         Properties properties = new Properties();
         properties.setProperty("lightLevel", Integer.toString(LIGHT_LEVEL));
-        properties.setProperty("distance", Integer.toString(DISTANCE));
+        properties.setProperty("chunk_distance", Integer.toString(CHUNK_DISTANCE));
         properties.setProperty("argb", Integer.toUnsignedString(ARGB, 16));
         properties.setProperty("scan_on", Boolean.toString(SCAN_ON));
         properties.setProperty("aura_on", Boolean.toString(AURA_ON));

@@ -117,9 +117,15 @@ class UI {
                         .executes(command_ctx -> {
                             Config.SCAN_ON = false;
                             Config.AURA_ON = true;
-                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level now scans the water once"));
-                            WaterScan.scan(MinecraftClient.getInstance());
-                            command_ctx.getSource().sendFeedback(Text.literal("Water Light Level now only renders the aura"));
+                            var command_ctx_source = command_ctx.getSource();
+                            command_ctx_source.sendFeedback(Text.literal("Water Light Level now scans the water once"));
+
+                            if (!WaterScan.scan(MinecraftClient.getInstance())) {
+                                throw new SimpleCommandExceptionType(
+                                        Text.literal("Somehow the world or the player don't exist...")
+                                ).create();
+                            }
+                            command_ctx_source.sendFeedback(Text.literal("Water Light Level now only renders the aura"));
                             Config.saveConfig();
                             return 1;
                         }))
