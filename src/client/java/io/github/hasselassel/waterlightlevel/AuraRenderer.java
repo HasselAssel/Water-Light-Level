@@ -6,6 +6,8 @@ import com.mojang.blaze3d.systems.CommandEncoder;
 import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.MappableRingBuffer;
@@ -21,6 +23,10 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 
 public class AuraRenderer {
+    private static final Vector4f COLOR_MODULATOR = new Vector4f(1f, 1f, 1f, 1f);
+    private static final Vector3f MODEL_OFFSET = new Vector3f();
+    private static final Matrix4f TEXTURE_MATRIX = new Matrix4f();
+
     private MappableRingBuffer mappableRingBuffer;
     private GpuBuffer indexBuffer;
     private BuiltBuffer.DrawParameters drawParameters;
@@ -29,13 +35,15 @@ public class AuraRenderer {
 
     private final BlockPos.Mutable tempPos = new BlockPos.Mutable();
 
-    private void rebuild() {
+    private boolean dirty = false;
+
+    private void rebuild(Long2ByteOpenHashMap directions) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().begin(
                 VertexFormat.DrawMode.QUADS,
                 VertexFormats.POSITION_COLOR
         );
 
-        for (var entry : WaterScan.DIRECTIONS.long2ByteEntrySet()) {
+        for (var entry : directions.long2ByteEntrySet()) {
             tempPos.set(entry.getLongKey());
             byte mask = entry.getByteValue();
             storeMaskedBlock(bufferBuilder, tempPos.getX(), tempPos.getY(), tempPos.getZ(), Config.ARGB, mask);
@@ -77,44 +85,6 @@ public class AuraRenderer {
         }
     }
 
-    protected static void init() {
-        WorldRenderEvents.AFTER_ENTITIES.register(render_ctx -> {
-            if (!Config.AURA_ON) return;
-
-            if (dirty) rebuild();
-
-            if (indexBuffer == null || drawParameters == null || mappableRingBuffer == null) return;
-
-            var camPos = render_ctx.gameRenderer().getCamera().getCameraPos();
-            Matrix4f modelView = new Matrix4f(RenderSystem.getModelViewMatrix()).translate((float) -camPos.x, (float) -camPos.y, (float) -camPos.z);
-
-            Vector4f COLOR_MODULATOR = new Vector4f(1f, 1f, 1f, 1f);
-            Vector3f MODEL_OFFSET = new Vector3f();
-            Matrix4f TEXTURE_MATRIX = new Matrix4f();
-            GpuBufferSlice dynamicTransforms = RenderSystem.getDynamicUniforms()
-                    .write(modelView, COLOR_MODULATOR, MODEL_OFFSET, TEXTURE_MATRIX);
-
-            RenderPass renderPass = RenderSystem.getDevice()
-                    .createCommandEncoder()
-                    .createRenderPass(
-                            () -> "Water Light Level Aura Renderer",
-                            MinecraftClient.getInstance().getFramebuffer().getColorAttachmentView(),
-                            OptionalInt.empty(),
-                            MinecraftClient.getInstance().getFramebuffer().getDepthAttachmentView(),
-                            OptionalDouble.empty()
-                    );
-            renderPass.setPipeline(RenderLayers.debugFilledBox().getRenderPipeline());
-            RenderSystem.bindDefaultUniforms(renderPass);
-            renderPass.setUniform("DynamicTransforms", dynamicTransforms);
-
-            var vertexBuffer = mappableRingBuffer.getBlocking();
-            renderPass.setVertexBuffer(0, vertexBuffer);
-            renderPass.setIndexBuffer(indexBuffer, drawParameters.indexType());
-            renderPass.drawIndexed(0, 0, drawParameters.indexCount(), 1);
-            renderPass.close();
-        });
-    }
-
     private static void v(BufferBuilder bb, float x, float y, float z, int argb) {
         bb.vertex(x, y, z).color(argb);
     }
@@ -146,5 +116,48 @@ public class AuraRenderer {
             quad(bb, x, y, z + 1, x + 1, y, z + 1, x + 1, y + 1, z + 1, x, y + 1, z + 1, argb);
         if ((mask & (1 << 5)) != 0) // -Z
             quad(bb, x + 1, y, z, x, y, z, x, y + 1, z, x + 1, y + 1, z, argb);
+    }
+
+    protected void render(WorldRenderContext render_ctx) {
+        if (indexBuffer == null || drawParameters == null || mappableRingBuffer == null) return;
+
+        var camPos = render_ctx.gameRenderer().getCamera().getCameraPos();
+        Matrix4f modelView = new Matrix4f(RenderSystem.getModelViewMatrix()).translate((float) -camPos.x, (float) -camPos.y, (float) -camPos.z);
+        GpuBufferSlice dynamicTransforms = RenderSystem.getDynamicUniforms()
+                .write(modelView, COLOR_MODULATOR, MODEL_OFFSET, TEXTURE_MATRIX);
+
+        RenderPass renderPass = RenderSystem.getDevice()
+                .createCommandEncoder()
+                .createRenderPass(
+                        () -> "Water Light Level Aura Renderer",
+                        MinecraftClient.getInstance().getFramebuffer().getColorAttachmentView(),
+                        OptionalInt.empty(),
+                        MinecraftClient.getInstance().getFramebuffer().getDepthAttachmentView(),
+                        OptionalDouble.empty()
+                );
+        renderPass.setPipeline(RenderLayers.debugFilledBox().getRenderPipeline());
+        RenderSystem.bindDefaultUniforms(renderPass);
+        renderPass.setUniform("DynamicTransforms", dynamicTransforms);
+
+        var vertexBuffer = mappableRingBuffer.getBlocking();
+        renderPass.setVertexBuffer(0, vertexBuffer);
+        renderPass.setIndexBuffer(indexBuffer, drawParameters.indexType());
+        renderPass.drawIndexed(0, 0, drawParameters.indexCount(), 1);
+        renderPass.close();
+    }
+
+    protected void markDirty() {
+        dirty = true;
+    }
+
+    protected static void init() {
+        WorldRenderEvents.AFTER_ENTITIES.register(render_ctx -> {
+            if (!Config.AURA_ON) return;
+
+            for (Chunk chunk : WaterScan.CHUNKS) {
+                if (chunk.auraRenderer.dirty) chunk.auraRenderer.rebuild(chunk.directions);
+                chunk.auraRenderer.render(render_ctx);
+            }
+        });
     }
 }

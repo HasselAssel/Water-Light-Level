@@ -18,7 +18,7 @@ class UI {
     private static final String MAIN_COMMAND = "waterlightlevel";
 
     private static final String OPTION_LIGHT_LEVEL = "lightlevel";
-    private static final String OPTION_DISTANCE = "distance";
+    private static final String OPTION_CHUNK_DISTANCE = "distance";
     private static final String OPTION_ARGB = "color_argb";
     private static final String OPTION_TOGGLE_ON_OFF = "toggle";
     private static final String OPTION_ON = "on";
@@ -58,17 +58,17 @@ class UI {
                             command_ctx.getSource().sendFeedback(Text.literal("Light Level Threshold: " + Config.LIGHT_LEVEL));
                             return 1;
                         }))
-                .then(ClientCommandManager.literal(OPTION_DISTANCE)
+                .then(ClientCommandManager.literal(OPTION_CHUNK_DISTANCE)
                         .then(ClientCommandManager.argument("dist", IntegerArgumentType.integer(0))
                                 .executes(command_ctx -> {
-                                    Config.DISTANCE = IntegerArgumentType.getInteger(command_ctx, "dist");
-                                    command_ctx.getSource().sendFeedback(Text.literal("Light Level Distance set to " + Config.DISTANCE));
+                                    Config.CHUNK_DISTANCE = IntegerArgumentType.getInteger(command_ctx, "dist");
+                                    command_ctx.getSource().sendFeedback(Text.literal("Light Level Distance set to " + Config.CHUNK_DISTANCE));
                                     Config.saveConfig();
                                     return 1;
                                 })))
-                .then(ClientCommandManager.literal(OPTION_DISTANCE)
+                .then(ClientCommandManager.literal(OPTION_CHUNK_DISTANCE)
                         .executes(command_ctx -> {
-                            command_ctx.getSource().sendFeedback(Text.literal("Light Level Distance: " + Config.DISTANCE));
+                            command_ctx.getSource().sendFeedback(Text.literal("Light Level Distance: " + Config.CHUNK_DISTANCE));
                             return 1;
                         }))
                 .then(ClientCommandManager.literal(OPTION_ARGB)

@@ -8,28 +8,36 @@ import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.LightType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Chunk {
-    private final LongOpenHashSet water = new LongOpenHashSet(4096);
-    private final Long2ByteOpenHashMap directions = new Long2ByteOpenHashMap(1024);
+    protected final LongOpenHashSet water = new LongOpenHashSet(4096);
+    protected final Long2ByteOpenHashMap directions = new Long2ByteOpenHashMap(1024);
 
     private final LongOpenHashSet dirty_blocks = new LongOpenHashSet();
 
-    private final AuraRenderer auraRenderer = new AuraRenderer();
+    protected final AuraRenderer auraRenderer = new AuraRenderer();
 
-    private int chunkX;
-    private int chunkZ;
+    protected int chunkX;
+    protected int chunkZ;
+
+    protected int relativeChunkX;
+    protected int relativeChunkZ;
 
     private static final BlockPos.Mutable tempPos = new BlockPos.Mutable();
 
-    public Chunk(int chunkX, int chunkZ) {
+    public Chunk(int chunkX, int chunkZ, int relativeChunkX, int relativeChunkZ) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+        this.relativeChunkX = relativeChunkX;
+        this.relativeChunkZ = relativeChunkZ;
     }
 
-    public void changeChunk(int chunkX, int chunkZ) {
+    public void changeChunk(int chunkX, int chunkZ, int relativeChunkX, int relativeChunkZ) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+        this.relativeChunkX = relativeChunkX;
+        this.relativeChunkZ = relativeChunkZ;
     }
 
     protected void markDirty(long blockPos) {
@@ -63,12 +71,15 @@ public class Chunk {
         }
 
         this.dirty_blocks.clear();
+        this.buildDirections();
     }
 
     protected void deltaScan(@NotNull ClientPlayerEntity player, @NotNull ClientWorld world) {
         int py = player.getBlockY();
         int minY = py - 8 - Config.CHUNK_DISTANCE * 16;
         int maxY = py + 8 + Config.CHUNK_DISTANCE * 16;
+
+        if (dirty_blocks.isEmpty()) return;
 
         for (long block : this.dirty_blocks) {
             tempPos.set(block);
@@ -83,6 +94,7 @@ public class Chunk {
         }
 
         this.dirty_blocks.clear();
+        this.buildDirections();
     }
 
     protected void buildDirections() {
@@ -100,6 +112,8 @@ public class Chunk {
 
             if (mask != 0) directions.put(block, mask);
         }
+
+        auraRenderer.markDirty();
     }
 
     protected long asLong() {
