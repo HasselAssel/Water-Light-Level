@@ -7,6 +7,11 @@ It renders a translucent **aura** around qualifying water blocks, making it easy
 - identify **dark underwater regions**
 - explore and debug **underwater lighting**
 
+Available on:
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/water-light-level)
+- [Modrinth](https://modrinth.com/mod/water-light-level)
+- [GitHub](https://github.com/HasselAssel/Water-Light-Level/releases)
+
 ---
 
 ## ✨ Features
