@@ -87,12 +87,6 @@ Updates on the waters light level will obviously not be taken into account when 
 
 ---
 
-# Links
-
-[Modrinth](https://modrinth.com/mod/water-light-level)
-
----
-
 ## 📦 Requirements
 
 - **Minecraft**: 1.21.11  
